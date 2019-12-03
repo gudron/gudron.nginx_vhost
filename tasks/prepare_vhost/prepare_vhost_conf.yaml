@@ -1,0 +1,6 @@
+---
+- name: Prepare nginx virtual hosts config files
+  template:
+    src: "templates/basic_{{ vhost.type }}_vhost_template.conf.j2"
+    dest: "{{ vhost_destintion_path }}/{{ alias }}.conf"
+    mode: "u=r,g=r"

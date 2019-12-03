@@ -1,0 +1,88 @@
+---
+vhost_destintion_path: /any/path/to/vhost/config/files/directory/
+
+vhost_headers_params:
+  X-Frame-Options:
+    value: "SAMEORIGIN"
+    always: true
+  X-Content-Type-Options:
+    value: "nosniff"
+    always: always
+  Strict-Transport-Security: 
+    value: "max-age=31536000; includeSubDomains; preload"
+    always: true
+  X-XSS-Protection:
+    value: "1; mode=block"
+    always: true
+  Content-Security-Policy:
+    value: "default-src * data: 'unsafe-eval' 'unsafe-inline'" 
+    always: true
+  
+host_params:
+  chartset: utf-8
+  status_path: ngxstatus
+
+vhost_fastcgi_params:
+  request_uri: $http_x_original_request if_not_empty
+  remote_addr: $http_x_real_ip if_not_empty
+  query_string: $query_string
+  request_method: $request_method
+  content_type: $content_type
+  content_length: $content_length
+  script_filename: $document_root$fastcgi_script_name
+  path_info: $fastcgi_path_info
+  path_translated: $document_root$fastcgi_script_name
+
+vhost_proxy_params:
+  Host: $http_host
+  Request-Uri: $request_uri
+  X-Real-IP: $remote_addr
+  X-Forwarded-For: $proxy_add_x_forwarded_for
+  X-Forwarded-Proto: $scheme
+  X-Original-Request: $request_uri
+
+include_params: []
+  # - /etc/nginx/conf.d/example_include_file.conf
+
+vhosts_params:
+  example_host:
+    type: fastcgi
+    domain: example.com
+    chartset: utf-8
+    template_path: /path/to/template/host.j2
+    bootstrap: index.php
+    root: /usr/local/share/example_app/public_dir
+    status_path: ngxstatus
+    headers:
+      X-Content-Type-Options: nosniff
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      X-Frame-Options: SAMEORIGIN
+    backends:
+      - address: serv1.example.internal
+        port: 1010
+    fastcgi_params:
+      request_uri: $http_x_original_request if_not_empty
+    include_params:
+      - /etc/nginx/conf.d/include_file.conf
+
+  example_host2:
+    type: proxy
+    domain: example.com
+    cert_file_path: /path/to/cert/example_host2/example_host2.crt
+    private_key_file_path: /path/to/cert/example_host2/example_host2.key
+    hpkp: hpkp
+    chartset: utf-8
+    template_path: /path/to/template/host.j2
+    root: /usr/local/share/example_app/public_dir
+    status_path: ngxstatus
+    headers:
+      X-Content-Type-Options: nosniff
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      X-Frame-Options: SAMEORIGIN
+    backends:
+      - address: serv1.example.internal
+        port: 8080
+    fastcgi_params:
+      request_uri: $http_x_original_request if_not_empty
+    include_params:
+      - /etc/nginx/conf.d/include_file.conf

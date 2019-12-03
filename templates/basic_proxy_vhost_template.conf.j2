@@ -1,0 +1,67 @@
+{{ ansible_managed | comment }}
+
+{% if vhost.backends %}
+upstream {{alias}}-upstream {
+{% for backend in vhost.backends %}
+    server {{backend.address}}:{{backend.port}};
+{% endfor %}
+}
+{% endif %}
+
+{%- if vhost.cert_file_path is defined -%}
+server {
+    listen {{ vhost.listen_host | default('*') }}:{{ vhost.listen_port | default(80) }} {{ listen_protocol| default('') }};
+
+    server_name ${{ alias }}_server_name;
+
+    {% for hader_name, header_value in headers_params + vhost.headers %}
+    add_header  {{ hader_name | title }} "{{ header_value }}";
+    {% endfor %}
+
+    location ^~ / {
+        return 301 https://$server_name$request_uri;
+    }
+}
+{% endif %}
+
+server {
+    listen {{ vhost.listen_host | default('*') }}:{{ vhost.port | default(443) }} {%- if vhost.cert_file_path is defined -%} ssl {% endif %} {{ listen_protocol| default('http2') }};
+
+    server_name ${{ alias }}_server_name;
+
+    server_tokens off;
+
+    charset {{ vhost.charset | default(host_params.chartset) }};
+
+    {%- if vhost.cert_file_path is defined -%}
+    ssl_certificate         /etc/nginx/cert/{{alias}}/{{alias}}.pub;
+    ssl_certificate_key     /etc/nginx/cert/{{alias}}/{{alias}}.pem;
+    {% endif %}
+
+    {% for include_path in include_params + vhost.include_params | default([]) %}
+    include {{include_path}};
+    {% endfor %}
+
+{% for hader_name, header in vhost_headers_params.items() %}
+    add_header {{ hader_name | title }} "{{ header.value }}" {% if header.always is defined and header.always -%} always {%- endif -%};
+{% endfor %}
+
+    {%- if vhost.cert_file_path is defined -%}
+    add_header Public-Key-Pins {{hpkp| default(vhost.hpkp)}};
+    {% endif %}
+
+    location ^~ /{{ vhost.status_path | default(host_params.status_path) }} {
+        status;
+        allow 127.0.0.1;
+        deny all;
+    }
+
+    location ^~ / {
+{% for param_name, param_value in vhost_proxy_params.items() %}
+        proxy_set_header  {{ param_name | title }} {{ param_value }};
+{% endfor %}
+
+        proxy_pass http://{{alias}}-upstream;
+        proxy_redirect http://{{alias}}-upstream/ https://$server_name/;
+    }
+}

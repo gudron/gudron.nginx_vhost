@@ -1,0 +1,7 @@
+---
+- name: Inlcude tasks
+  include_tasks: "{{ task_name }}"
+  loop:
+    - prepare_vhosts.yaml
+  loop_control:
+    loop_var: task_name

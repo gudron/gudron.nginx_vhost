@@ -1,0 +1,5 @@
+{{ ansible_managed | comment }}
+
+{% for alias, vhost in vhosts_params.items() %}
+set ${{ alias }}_server_name "{{ vhost.domain }}";
+{% endfor %}

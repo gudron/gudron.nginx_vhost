@@ -1,0 +1,51 @@
+{{ ansible_managed | comment }}
+
+upstream {{alias}}-upstream {
+{% for backend in vhost.backends %}
+    server {{backend.address}}:{{backend.port}};
+{% endfor %}
+}
+
+
+server {
+    listen       {{ vhost.listen_host | default('*') }}:{{ vhost.listen_port | default(8080) }} {{ listen_protocol| default('') }};
+
+    server_name ${{ alias }}_server_name;
+
+    server_tokens off;
+
+    charset {{ vhost.charset | default(host_params.chartset) }};
+
+    set $bootstrap "{{ vhost.bootstrap | default('index.php')}}";
+    set $app_root "{{vhost.root}}";
+
+    root $app_root;
+
+    location ^~ /{{ vhost.status_path | default(host_params.status_path) }} {
+        status;
+        allow 127.0.0.1;
+        deny all;
+    }
+
+    location / {
+        root $app_root;
+        index  index.html $bootstrap;
+        try_files $uri $uri/ /$bootstrap?$args;
+    }
+
+{% for include_path in include_params + vhost.include_params | default([]) %}
+    include {{include_path}};
+{% endfor %}
+
+    location ~ \.{{vhost.bootstrap.split(".")[1] }}$ {
+        root $app_root;
+
+        fastcgi_pass {{alias}}-upstream;
+        fastcgi_index {{vhost.bootstrap}};
+
+    {%- for param_name, param_value in vhost_fastcgi_params.items() %} 
+        fastcgi_param {{ param_name | upper }} {{ param_value }};
+    {%- endfor %}
+
+    }
+}

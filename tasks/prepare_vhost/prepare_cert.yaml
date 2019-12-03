@@ -1,0 +1,27 @@
+---
+- name: Copy cert private key
+  copy:
+    src: "{{ vhost.private_key_file_path }}"
+    dest: "/etc/nginx/cert/{{ alias }}/{{ alias }}.pem"
+    mode: 0400
+  when: vhost.private_key_file_path is defined
+
+- name: Copy cert file
+  copy:
+    src: "{{ vhost.cert_file_path }}"
+    dest: "/etc/nginx/cert/{{ alias }}/{{ alias }}.crt"
+    mode: 0400
+  when: vhost.cert_file_path is defined
+
+- name: Make hpkp key 
+  command: "openssl {{ vhost.private_key_file_path }} -outform der -pubout | openssl dgst -sha256 -binary | openssl enc -base64"
+  register: hpkp_output
+  when: 
+    - vhost.private_key_file_path is defined
+    - vhost.hpkp is not defined
+
+- set_fact: 
+    hpkp={{ hpkp_output.stdout }}
+  when: 
+    - vhost.private_key_file_path is defined
+    - vhost.hpkp is not defined
