@@ -82,7 +82,7 @@ vhosts_params:
     backends:
       - address: serv1.example.internal
         port: 8080
-    fastcgi_params:
-      request_uri: $http_x_original_request if_not_empty
+    proxy_params:
+      X-Real-IP: $remote_addr
     include_params:
       - /etc/nginx/conf.d/include_file.conf
