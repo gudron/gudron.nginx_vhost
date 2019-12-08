@@ -94,7 +94,7 @@ Instalation
 Add **gudron.nginx_vhost** role to your *requirements* file.
 
 ```yaml
-  - src: git@bitbucket.org:gdrn_cloud/gudron.nginx_vhost.git
+  - src: git@github.com:gudron/gudron.nginx_vhost.git
     scm: git
     version: master
 ```
