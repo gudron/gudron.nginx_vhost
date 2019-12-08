@@ -87,10 +87,26 @@ Role Variables
   * `bootstrap: string`
     Path in bootstrap location, like `index.php`. This is variable of `index` - https://nginx.org/ru/docs/http/ngx_http_index_module.html#index and `try_files` - http://nginx.org/ru/docs/http/ngx_http_core_module.html#try_files directives.
 
+
+Instalation
+-----------
+
+Add **gudron.nginx_vhost** role to your *requirements* file.
+
+```yaml
+  - src: git@github.com:gudron/gudron.nginx_vhost.git
+    scm: git
+    version: master
+```
+
+Install roles via **ansible-galaxy** tool.
+
+```bash
+ansible-galaxy install -p roles -r requirements.yml
+```
+
 Example Playbook
 ----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
     - hosts: example_project:&example_project_stage
       any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
@@ -147,4 +163,4 @@ Including an example of how to use your role (for instance, with variables passe
 License
 -------
 
-BSD
+Apache 2.0
