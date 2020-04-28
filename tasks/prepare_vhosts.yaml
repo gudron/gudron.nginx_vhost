@@ -5,11 +5,11 @@
     state: directory
     mode: '0750'
 
-- name: Prepare nginx all host name variables
-  template:
-    src: templates/hosts_names.conf.j2
-    dest: "{{ vhost_destintion_path }}/hosts_names.conf"
-    mode: "u=r,g=r"
+# - name: Prepare nginx all host name variables
+#   template:
+#     src: templates/hosts_names.conf.j2
+#     dest: "{{ vhost_destintion_path }}/hosts_names.conf"
+#     mode: "u=r,g=r"
 
 - name: Inlcude tasks
   include_tasks: prepare_vhost/prepare_cert.yaml
