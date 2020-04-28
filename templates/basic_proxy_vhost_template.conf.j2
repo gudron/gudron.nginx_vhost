@@ -3,7 +3,7 @@
 {% if vhost.backends %}
 upstream {{alias}}-upstream {
 {% for backend in vhost.backends %}
-    server {{backend.address}}:{{backend.port}};
+    server {{backend.address}}:{{backend.listen.port}};
 {% endfor %}
 }
 {% endif %}
