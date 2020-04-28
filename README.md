@@ -124,7 +124,8 @@ Including an example of how to use your role (for instance, with variables passe
                   - /etc/nginx/conf.d/include_file.conf
                 backends: 
                   - address: api.example.internal
-                    port: 8080
+                    listen:
+                      port: 8080
 
         - name: gudron.nginx_vhost
           vars: 
