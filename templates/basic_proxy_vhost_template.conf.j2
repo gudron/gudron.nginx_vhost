@@ -12,7 +12,7 @@ upstream {{alias}}-upstream {
 server {
     listen {{ vhost.listen_host | default('*') }}:{{ vhost.listen.port | default(80) }} {{ listen_protocol| default('') }};
 
-    server_name ${{ alias }}_server_name;
+    server_name {{ vhost.domain }};
 
     {% for hader_name, header_value in headers_params + vhost.headers %}
     add_header  {{ hader_name | title }} "{{ header_value }}";
@@ -27,7 +27,7 @@ server {
 server {
     listen {{ vhost.listen_host | default('*') }}:{{ vhost.listen.port | default(443) }} {%- if vhost.cert_file_path is defined -%} ssl {% endif %} {{ listen_protocol| default('http2') }};
 
-    server_name ${{ alias }}_server_name;
+    server_name {{ vhost.domain }};
 
     server_tokens off;
 

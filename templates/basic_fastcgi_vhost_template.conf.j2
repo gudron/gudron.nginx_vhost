@@ -10,7 +10,7 @@ upstream {{alias}}-upstream {
 server {
     listen       {{ vhost.listen_host | default('*') }}:{{ vhost.listen.port | default(8080) }} {{ listen_protocol| default('') }};
 
-    server_name ${{ alias }}_server_name;
+    server_name {{ vhost.domain }};
 
     server_tokens off;
 
