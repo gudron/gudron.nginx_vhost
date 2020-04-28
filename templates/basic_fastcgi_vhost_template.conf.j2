@@ -37,9 +37,10 @@ server {
         fastcgi_pass {{alias}}-upstream;
         fastcgi_index {{vhost.bootstrap}};
 
-        {%- for param_name, param_value in vhost_fastcgi_params.items() -%}
+
+    {% for param_name, param_value in vhost_fastcgi_params.items() %}
         fastcgi_param {{ param_name | upper }} {{ param_value }};
-        {% endfor %}
+    {% endfor %}
 
     }
 }
