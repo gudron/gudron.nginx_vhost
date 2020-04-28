@@ -125,7 +125,8 @@ Example Playbook
               X-Forwarded-Proto: $scheme
             vhosts_params:
               api:
-                port: 80
+                lisen:
+                  port: 80
                 domain: api.example.com
                 type: proxy
                 root: /example/project/app/static/dir/

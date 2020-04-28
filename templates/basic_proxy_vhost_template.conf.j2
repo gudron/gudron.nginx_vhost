@@ -10,7 +10,7 @@ upstream {{alias}}-upstream {
 
 {%- if vhost.cert_file_path is defined -%}
 server {
-    listen {{ vhost.listen_host | default('*') }}:{{ vhost.listen_port | default(80) }} {{ listen_protocol| default('') }};
+    listen {{ vhost.listen_host | default('*') }}:{{ vhost.listen.port | default(80) }} {{ listen_protocol| default('') }};
 
     server_name ${{ alias }}_server_name;
 
@@ -25,7 +25,7 @@ server {
 {% endif %}
 
 server {
-    listen {{ vhost.listen_host | default('*') }}:{{ vhost.port | default(443) }} {%- if vhost.cert_file_path is defined -%} ssl {% endif %} {{ listen_protocol| default('http2') }};
+    listen {{ vhost.listen_host | default('*') }}:{{ vhost.listen.port | default(443) }} {%- if vhost.cert_file_path is defined -%} ssl {% endif %} {{ listen_protocol| default('http2') }};
 
     server_name ${{ alias }}_server_name;
 

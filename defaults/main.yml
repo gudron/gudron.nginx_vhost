@@ -8,16 +8,16 @@ vhost_headers_params:
   X-Content-Type-Options:
     value: "nosniff"
     always: always
-  Strict-Transport-Security: 
+  Strict-Transport-Security:
     value: "max-age=31536000; includeSubDomains; preload"
     always: true
   X-XSS-Protection:
     value: "1; mode=block"
     always: true
   Content-Security-Policy:
-    value: "default-src * data: 'unsafe-eval' 'unsafe-inline'" 
+    value: "default-src * data: 'unsafe-eval' 'unsafe-inline'"
     always: true
-  
+
 host_params:
   chartset: utf-8
   status_path: ngxstatus
@@ -47,6 +47,8 @@ include_params: []
 vhosts_params:
   example_host:
     type: fastcgi
+    listen:
+      port: 80
     domain: example.com
     chartset: utf-8
     template_path: /path/to/template/host.j2
@@ -59,7 +61,8 @@ vhosts_params:
       X-Frame-Options: SAMEORIGIN
     backends:
       - address: serv1.example.internal
-        port: 1010
+        lisen:
+          port: 1010
     fastcgi_params:
       request_uri: $http_x_original_request if_not_empty
     include_params:
@@ -67,6 +70,8 @@ vhosts_params:
 
   example_host2:
     type: proxy
+    listen:
+      port: 80
     domain: example.com
     cert_file_path: /path/to/cert/example_host2/example_host2.crt
     private_key_file_path: /path/to/cert/example_host2/example_host2.key
@@ -81,7 +86,8 @@ vhosts_params:
       X-Frame-Options: SAMEORIGIN
     backends:
       - address: serv1.example.internal
-        port: 8080
+        listen:
+          port: 8080
     proxy_params:
       X-Real-IP: $remote_addr
     include_params:
