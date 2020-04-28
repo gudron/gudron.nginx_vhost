@@ -17,12 +17,6 @@ server {
     add_header  {{ hader_name | title }} "{{ header.value }}" {% if header.always is defined and header.always -%} always {%- endif -%};
 {% endfor %}
 
-    location ^~ /{{ vhost.status_path | default(host_params.status_path) }} {
-        status;
-        allow 127.0.0.1;
-        deny all;
-    }
-
     location / {
         root $app_root;
         index  index.html;

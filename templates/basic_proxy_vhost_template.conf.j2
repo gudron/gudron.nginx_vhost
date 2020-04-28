@@ -50,12 +50,6 @@ server {
     add_header Public-Key-Pins {{hpkp| default(vhost.hpkp)}};
     {% endif %}
 
-    location ^~ /{{ vhost.status_path | default(host_params.status_path) }} {
-        status;
-        allow 127.0.0.1;
-        deny all;
-    }
-
     location ^~ / {
 {% for param_name, param_value in vhost_proxy_params.items() %}
         proxy_set_header  {{ param_name | title }} {{ param_value }};
