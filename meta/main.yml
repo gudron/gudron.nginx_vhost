@@ -1,7 +1,7 @@
 galaxy_info:
-  author: Alex V Kotelnikov 
+  author: Alex V Kotelnikov
   description: Role for automated create nginx vhost config files
-  license: "license (Apache)"
+  license: Apache 2.0
 
   min_ansible_version: 2.4
 
@@ -15,7 +15,7 @@ galaxy_info:
     - name: Debian
       versions:
         - 8.0
-        - 9.0  
+        - 9.0
 
   galaxy_tags:
     - new host
