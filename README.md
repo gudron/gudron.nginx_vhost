@@ -45,6 +45,9 @@ Role Variables
   * `root: string`
     Set root directory path for virtual host. This is `root` nginx config file directive - http://nginx.org/en/docs/http/ngx_http_core_module.html#root
 
+  * `letsencrypt_webroot_challange: Yes or No`
+    Enable Let's Encrypt `webroot` challenge. Added `.well-known` location to nginx virtual hosts - location root is relative by `root` parameter.
+
   * `status_path: string`
     Set path for virtual host status location. This is path in location section for virtual host status - http://nginx.org/ru/docs/http/ngx_http_status_module.html#status
 

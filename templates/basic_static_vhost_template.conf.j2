@@ -23,6 +23,14 @@ server {
         try_files $uri $uri/ /$uri?$args;
     }
 
+    {%- if vhost.letsencrypt_webroot_challange is defined and vhost.letsencrypt_webroot_challange -%}
+    location /.well-known/ {
+        root "{{ vhost.root }}/.well-known/";
+        index  index.html;
+        try_files $uri $uri/ /$uri?$args;
+    }
+    {% endif %}
+
 {% for include_path in include_params + vhost.include_params | default([]) %}
     include {{include_path}};
 {% endfor %}
