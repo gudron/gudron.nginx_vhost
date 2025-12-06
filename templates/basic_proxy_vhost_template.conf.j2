@@ -50,24 +50,23 @@ server {
     add_header Public-Key-Pins {{hpkp| default(vhost.hpkp)}};
     {% endif %}
 
-    {% if vhost.letsencrypt_webroot_challange is defined and vhost.letsencrypt_webroot_challange %}
-    location ^~ /.well-known/ {
-        root "{{ vhost.root }}/.well-known/";
-        index  index.html;
-        try_files $uri $uri/ /$uri?$args;
-    }
-    {% endif %}
-
-    location ^~ / {
+    location @backend {
 {% for param_name, param_value in vhost_proxy_params.items() %}
         proxy_set_header  {{ param_name | title }} {{ param_value }};
 {% endfor %}
 
         proxy_pass http://{{alias}}-upstream;
-        {% if vhost.cert_file_path is defined %}
+
+    {% if vhost.cert_file_path is defined %}
         proxy_redirect http://{{alias}}-upstream/ https://$server_name/;
-        {% else %}
+    {% else %}
         proxy_redirect http://{{alias}}-upstream/ http://$server_name/;
-        {% endif %}
+    {% endif %}
+    }
+
+    location / {
+        root {{ vhost.root }};
+        index  index.html;
+        try_files $uri $uri/ @backend;
     }
 }
