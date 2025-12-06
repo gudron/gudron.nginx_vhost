@@ -27,8 +27,8 @@ server {
         try_files $uri $uri/ /$bootstrap?$args;
     }
 
-    {%- if vhost.letsencrypt_webroot_challange is defined and vhost.letsencrypt_webroot_challange -%}
-    location /.well-known/ {
+    {% if vhost.letsencrypt_webroot_challange is defined and vhost.letsencrypt_webroot_challange %}
+    location ^~ /.well-known/ {
         root "{{ vhost.root }}/.well-known/";
         index  index.html;
         try_files $uri $uri/ /$uri?$args;
