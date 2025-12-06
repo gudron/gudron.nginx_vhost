@@ -56,7 +56,7 @@ server {
 {% endfor %}
 
         proxy_pass http://{{alias}}-upstream;
-        {%- if vhost.cert_file_path is defined -%}
+        {% if vhost.cert_file_path is defined %}
         proxy_redirect http://{{alias}}-upstream/ https://$server_name/;
         {% else %}
         proxy_redirect http://{{alias}}-upstream/ http://$server_name/;
