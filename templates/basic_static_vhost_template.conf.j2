@@ -21,10 +21,10 @@ server {
 
     charset {{ vhost.charset | default(host_params.chartset) }};
 
-    {%- if vhost.cert_file_path is defined -%}
+{% if vhost.cert_file_path is defined %}
     ssl_certificate         {{ vhost.cert_file_path }};
     ssl_certificate_key     {{ vhost.private_key_file_path }};
-    {% endif %}
+{% endif %}
 
     set $app_root "{{vhost.root}}";
 
