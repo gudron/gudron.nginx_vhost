@@ -34,8 +34,8 @@ server {
     charset {{ vhost.charset | default(host_params.chartset) }};
 
     {%- if vhost.cert_file_path is defined -%}
-    ssl_certificate         /etc/nginx/cert/{{alias}}/{{alias}}.pub;
-    ssl_certificate_key     /etc/nginx/cert/{{alias}}/{{alias}}.pem;
+    ssl_certificate         {{ vhost.cert_file_path }};
+    ssl_certificate_key     {{ vhost.private_key_file_path }};
     {% endif %}
 
     {% for include_path in include_params + vhost.include_params | default([]) %}
@@ -45,10 +45,6 @@ server {
 {% for hader_name, header in vhost_headers_params.items() %}
     add_header {{ hader_name | title }} "{{ header.value }}" {% if header.always is defined and header.always -%} always {%- endif -%};
 {% endfor %}
-
-    {%- if vhost.cert_file_path is defined -%}
-    add_header Public-Key-Pins {{hpkp| default(vhost.hpkp)}};
-    {% endif %}
 
     location @backend {
 {% for param_name, param_value in vhost_proxy_params.items() %}
