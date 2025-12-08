@@ -12,10 +12,6 @@ server {
 
     server_name {{ vhost.domain }};
 
-    {% for hader_name, header_value in vhost_headers_params + vhost.headers %}
-    add_header  {{ hader_name | title }} "{{ header_value }}";
-    {% endfor %}
-
     location ^~ / {
         return 301 https://$server_name$request_uri;
     }
