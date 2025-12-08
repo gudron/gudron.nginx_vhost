@@ -49,7 +49,7 @@ vhosts_params:
       - name: X-Frame-Options
         value: SAMEORIGIN
         always: true
-      - name: X-XSS-Protection:
+      - name: X-XSS-Protection
         value: "1; mode=block"
         always: true
     backends:
@@ -75,9 +75,18 @@ vhosts_params:
     letsencrypt_webroot_challange: Yes
     status_path: ngxstatus
     headers:
-      X-Content-Type-Options: nosniff
-      Strict-Transport-Security: max-age=31536000; includeSubDomains
-      X-Frame-Options: SAMEORIGIN
+      - name: X-Content-Type-Options
+        value: nosniff
+        always: true
+      - name: Strict-Transport-Security
+        value: max-age=31536000; includeSubDomains
+        always: true
+      - name: X-Frame-Options
+        value: SAMEORIGIN
+        always: true
+      - name: X-XSS-Protection
+        value: "1; mode=block"
+        always: true
     backends:
       - address: serv1.example.internal
         listen:
