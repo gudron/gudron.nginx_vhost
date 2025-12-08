@@ -34,10 +34,9 @@ server {
 
     root $app_root;
 
-{% for hader_name, header in vhost_headers_params.items() | default({}) %}
-    add_header  {{ hader_name | title }} "{{ header.value }}" {% if header.always is defined and header.always -%} always {%- endif -%};
+{% for header in vhost.headers %}
+    add_header {{ header.name | title }} "{{ header.value }}" {% if header.always is defined and header.always -%} always {%- endif -%};
 {% endfor %}
-
     location / {
         root $app_root;
         index  index.html;

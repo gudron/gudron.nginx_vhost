@@ -1,23 +1,6 @@
 ---
 vhost_destintion_path: /any/path/to/vhost/config/files/directory/
 
-vhost_headers_params:
-  X-Frame-Options:
-    value: "SAMEORIGIN"
-    always: true
-  X-Content-Type-Options:
-    value: "nosniff"
-    always: always
-  Strict-Transport-Security:
-    value: "max-age=31536000; includeSubDomains; preload"
-    always: true
-  X-XSS-Protection:
-    value: "1; mode=block"
-    always: true
-  Content-Security-Policy:
-    value: "default-src * data: 'unsafe-eval' 'unsafe-inline'"
-    always: true
-
 host_params:
   chartset: utf-8
   status_path: ngxstatus
@@ -57,9 +40,18 @@ vhosts_params:
     letsencrypt_webroot_challange: No
     status_path: ngxstatus
     headers:
-      X-Content-Type-Options: nosniff
-      Strict-Transport-Security: max-age=31536000; includeSubDomains
-      X-Frame-Options: SAMEORIGIN
+      - name: X-Content-Type-Options
+        value: nosniff
+        always: true
+      - name: Strict-Transport-Security
+        value: max-age=31536000; includeSubDomains
+        always: true
+      - name: X-Frame-Options
+        value: SAMEORIGIN
+        always: true
+      - name: X-XSS-Protection:
+        value: "1; mode=block"
+        always: true
     backends:
       - address: serv1.example.internal
         lisen:

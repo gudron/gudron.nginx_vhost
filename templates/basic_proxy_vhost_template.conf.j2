@@ -14,7 +14,7 @@ server {
 
     server_name {{ vhost.domain }};
 
-    {% for hader_name, header_value in headers_params + vhost.headers %}
+    {% for hader_name, header_value in vhost_headers_params + vhost.headers %}
     add_header  {{ hader_name | title }} "{{ header_value }}";
     {% endfor %}
 
@@ -42,8 +42,8 @@ server {
     include {{include_path}};
     {% endfor %}
 
-{% for hader_name, header in vhost_headers_params.items() %}
-    add_header {{ hader_name | title }} "{{ header.value }}" {% if header.always is defined and header.always -%} always {%- endif -%};
+{% for header in vhost.headers %}
+    add_header {{ header.name | title }} "{{ header.value }}" {% if header.always is defined and header.always -%} always {%- endif -%};
 {% endfor %}
 
     location @backend {
