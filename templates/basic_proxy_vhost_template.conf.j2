@@ -59,7 +59,6 @@ server {
 
     location / {
         root {{ vhost.root }};
-        index  index.html;
         try_files $uri $uri/ @backend;
     }
 }
