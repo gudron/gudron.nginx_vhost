@@ -40,7 +40,7 @@ server {
     {% endfor %}
 
 {% for header in vhost.headers %}
-    add_header {{ header.name | title }}: "{{ header.value }}" {% if header.always is defined and header.always -%} always {%- endif -%};
+    add_header {{ header.name | title }} "{{ header.value }}" {% if header.always is defined and header.always -%} always {%- endif -%};
 {% endfor %}
 
     location @backend {
